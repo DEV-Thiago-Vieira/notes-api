@@ -1,0 +1,19 @@
+{
+  "name": "note-api",
+  "version": "1.0.0",
+  "description": "Notes API",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/server.js"
+  },
+  "author": {
+    "name": "Thiago DEV"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.5",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
