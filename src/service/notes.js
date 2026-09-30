@@ -1,5 +1,5 @@
 const db = require("../../db.js");
-const AppError = require("../config/AppError.js");
+const { BadRequestError, NotFoundError } = require("../config/AppError.js");
 async function getAllNotes() {
   const [notes] = await db.query("SELECT * FROM notes");
   return notes;
@@ -7,7 +7,7 @@ async function getAllNotes() {
 
 async function getNoteById(id) {
   if (!id) {
-    throw new AppError("Id is required", 400);
+    throw new BadRequestError("Id is required");
   }
 
   const [notes] = await db.query("SELECT * FROM notes WHERE id = ? LIMIT 1", [
@@ -15,7 +15,7 @@ async function getNoteById(id) {
   ]);
 
   if (notes.length === 0) {
-    throw new AppError("Note not found", 404);
+    throw new NotFoundError("Note not found", { id });
   }
 
   return notes[0];
@@ -23,7 +23,7 @@ async function getNoteById(id) {
 
 async function createNote(content, author) {
   if (!content || !author) {
-    throw new AppError("content and author are required", 400);
+    throw new BadRequestError("content and author are required");
   }
 
   await db.query(
@@ -36,7 +36,7 @@ async function createNote(content, author) {
 
 async function updateNote(id, content, author) {
   if (!id || !content || !author) {
-    throw new AppError("id, content and author are required", 400);
+    throw new BadRequestError("id, content and author are required");
   }
 
   await getNoteById(id);
@@ -51,7 +51,7 @@ async function updateNote(id, content, author) {
 
 async function deleteNote(id) {
   if (!id) {
-    throw new AppError("Id is required", 400);
+    throw new BadRequestError("Id is required");
   }
 
   await getNoteById(id);
