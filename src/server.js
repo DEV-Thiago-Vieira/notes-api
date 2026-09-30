@@ -7,6 +7,7 @@ const errorHandler = require("./middleware/errorHandler.js");
 const app = express();
 
 app.use(swagger);
+app.use(express.json());
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/notes", notesRoutes);
 

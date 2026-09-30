@@ -144,7 +144,7 @@ router.put("/:id", async (req, res) => {
  *        description: Success
  */
 router.delete("/:id", async (req, res) => {
-  const id = req.params.id;
+  const id = req.params?.id;
   await notesService.deleteNote(id);
   res.status(200).send();
 });
