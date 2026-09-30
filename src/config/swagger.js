@@ -1,5 +1,6 @@
 const express = require("express");
 const swaggerJsDoc = require("swagger-jsdoc");
+const packageJson = require("../../package.json");
 const swaggerUi = require("swagger-ui-express");
 
 const router = express.Router();
@@ -8,13 +9,13 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Notes API",
-      version: "1.0.0",
-      description: "A REST API for managing users and notes.",
+      title: packageJson.name,
+      version: packageJson.version,
+      description: packageJson.description,
       contact: {
-        name: "API Support",
-        email: "support@example.com",
-        url: "https://example.com/support",
+        name: packageJson.author.name,
+        email: packageJson.author.email,
+        url: packageJson.author.url,
       },
       license: {
         name: "MIT",
@@ -28,10 +29,6 @@ const options = {
       },
     ],
     tags: [
-      {
-        name: "Test",
-        description: "Test endpoints",
-      },
       {
         name: "Users",
         description: "Users endpoints",

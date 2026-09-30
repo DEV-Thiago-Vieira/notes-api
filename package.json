@@ -1,13 +1,15 @@
 {
   "name": "note-api",
   "version": "1.0.0",
-  "description": "Notes API",
+  "description": "A REST API for managing users and notes.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/server.js"
   },
   "author": {
-    "name": "Thiago DEV"
+    "name": "Thiago DEV",
+    "email": "vieirathiago779@gmail.com",
+    "url": "https://thiago-vieira.com"
   },
   "dependencies": {
     "dotenv": "^18.0.4",
