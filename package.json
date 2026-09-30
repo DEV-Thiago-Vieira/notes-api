@@ -4,7 +4,8 @@
   "description": "A REST API for managing users and notes.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/server.js"
+    "dev": "nodemon ./src/server.js",
+    "migrate": "node src/migrate.js"
   },
   "author": {
     "name": "Thiago DEV",
@@ -16,6 +17,7 @@
     "express": "^5.2.1",
     "mysql2": "^3.24.5",
     "swagger-jsdoc": "^6.3.0",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "umzug": "^3.8.3"
   }
 }
