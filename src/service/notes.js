@@ -1,5 +1,5 @@
 const db = require("../../db.js");
-const AppError = require("../config/AppError.js");
+const { AppError } = require("../config/AppError.js");
 async function getAllNotes() {
   const [notes] = await db.query("SELECT * FROM notes");
   return notes;
