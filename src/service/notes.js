@@ -1,5 +1,6 @@
 const db = require("../../db.js");
 const { BadRequestError, NotFoundError } = require("../config/AppError.js");
+
 async function getAllNotes() {
   const [notes] = await db.query("SELECT * FROM notes");
   return notes;
@@ -27,9 +28,7 @@ async function createNote(content, author) {
   }
 
   await db.query(
-    `INSERT INTO notes
-     (id, content, author, createdAt, updatedAt)
-     VALUES (UUID(), ?, ?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())`,
+    `INSERT INTO notes(content, author) VALUES (?, ?)`,
     [content, author],
   );
 }
@@ -43,7 +42,7 @@ async function updateNote(id, content, author) {
 
   await db.query(
     `UPDATE notes
-     SET content = ?, author = ?, updatedAt = CURRENT_TIMESTAMP()
+     SET content = ?, author = ?
      WHERE id = ?`,
     [content, author, id],
   );
