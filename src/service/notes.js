@@ -1,9 +1,28 @@
 const db = require("../../db.js");
 const { BadRequestError, NotFoundError } = require("../config/AppError.js");
+const Notes = require("../models/notes.js");
+const User = require("../models/user.js");
+const { getUserById } = require("../service/users.js");
 
 async function getAllNotes() {
   const [notes] = await db.query("SELECT * FROM notes");
-  return notes;
+  const result = await Promise.all(
+    notes.map(async (note) => {
+      const user = new User(await getUserById(note.userId));
+      return {
+        id: note.id,
+        content: note.content,
+        createdAt: note.createdAt,
+        updatedAt: note.updatedAt,
+        author: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      };
+    }),
+  );
+  return result;
 }
 
 async function getNoteById(id) {
@@ -19,32 +38,52 @@ async function getNoteById(id) {
     throw new NotFoundError("Note not found", { id });
   }
 
-  return notes[0];
+  const note = notes[0];
+  const user = new User(await getUserById(note.userId));
+
+  const result = {
+    id: note.id,
+    content: note.content,
+    createdAt: note.createdAt,
+    updatedAt: note.updatedAt,
+    author: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+  };
+
+  return result;
 }
 
-async function createNote(content, author) {
-  if (!content || !author) {
+async function createNote(content, userId) {
+  if (!content || !userId) {
     throw new BadRequestError("content and author are required");
   }
 
-  await db.query(
-    `INSERT INTO notes(content, author) VALUES (?, ?)`,
-    [content, author],
-  );
+  await db.query(`INSERT INTO notes(content, userId) VALUES (?, ?)`, [
+    content,
+    userId,
+  ]);
 }
 
-async function updateNote(id, content, author) {
-  if (!id || !content || !author) {
-    throw new BadRequestError("id, content and author are required");
+async function updateNote({ id, content, userId }) {
+  if (!id) {
+    throw new BadRequestError("id is required.");
   }
 
-  await getNoteById(id);
+  const { author, ...note } = await getNoteById(id);
+  const notes = new Notes({ ...note, userId: author.id });
+  notes.content = content ?? notes.content;
+  notes.userId = userId ?? notes.userId;
+  await getUserById(notes.userId);
 
+  notes.content;
   await db.query(
     `UPDATE notes
-     SET content = ?, author = ?
+     SET content = ?, userId = ?
      WHERE id = ?`,
-    [content, author, id],
+    [notes.content, notes.userId, notes.id],
   );
 }
 

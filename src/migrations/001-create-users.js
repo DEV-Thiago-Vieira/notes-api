@@ -3,6 +3,7 @@ module.exports = {
     await db.query(`
       CREATE TABLE users (
         id CHAR(36) NOT NULL DEFAULT (UUID()) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
